@@ -87,3 +87,5 @@ async def delete_task(task_id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Task with ID {task_id} not found"
         )
+
+#completed all the endpoints for the task management API, including creating, reading, updating, and deleting tasks. The API also includes health check and root endpoints.
