@@ -53,3 +53,37 @@ async def create_task(task: Tasktitle):
     }
     tasks.append(new_task)
     return new_task
+
+
+class updateTask(BaseModel):
+    title: str
+    done: bool
+
+@app.put("/tasks/{task_id}")
+async def update_task(task_id: int, updated_task: updateTask):
+
+    if not updated_task.title.strip():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Task title is required"
+        )
+    task = next((task for task in tasks if task["id"] == task_id), None)
+    if task:
+        task["title"] = updated_task.title
+        task["done"] = updated_task.done
+        return task
+    raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task with ID {task_id} not found"
+        )
+
+@app.delete("/tasks/{task_id}",status_code=status.HTTP_204_NO_CONTENT)
+async def delete_task(task_id: int):
+    task = next((task for task in tasks if task["id"] == task_id), None)
+    if task:
+        tasks.remove(task)
+        return {"message": f"Task with ID {task_id} deleted successfully"}
+    raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task with ID {task_id} not found"
+        )
