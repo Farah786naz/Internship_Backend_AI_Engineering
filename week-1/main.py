@@ -99,7 +99,7 @@ async def create_task(task: Tasktitle, db: Session = Depends(get_db)):
         )
     
     new_task = Task(
-        title=task.title,
+        description=task.title,
         done=False
     )
     db.add(new_task)
@@ -122,7 +122,7 @@ async def update_task(task_id: int, updated_task: updateTask, db: Session = Depe
         )
     task = db.query(Task).filter(Task.id == task_id).first()
     if task:
-        task.title = updated_task.title
+        task.description = updated_task.title
         task.done = updated_task.done
         db.commit()
         db.refresh(task)

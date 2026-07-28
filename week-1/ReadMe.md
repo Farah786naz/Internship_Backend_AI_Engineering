@@ -13,6 +13,28 @@ uvicorn main:app --reload
 
 The API will be available at `http://127.0.0.1:8000`.
 
+## SQLite Checkpoint
+
+SQLite was chosen because it is a single-file database with zero setup overhead, and it survives restarts because the data is written to disk instead of living only in memory.
+
+The database file lives at [tasks.db](C:/Users/Abc/Desktop/Internship/week_1/tasks.db). It is created automatically the first time the app starts and should usually be git-ignored so each fresh clone starts clean.
+
+One documented command to start the project is:
+
+```bash
+uvicorn main:app --reload
+```
+
+Database screenshot from DB Browser:
+
+Add the DB Browser screenshot here once it is captured.
+
+Example SQL query used in Stage 4:
+
+```sql
+SELECT * FROM tasks;
+```
+
 ## Endpoints
 
 - `GET /` returns a short API summary.
