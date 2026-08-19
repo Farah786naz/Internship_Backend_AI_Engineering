@@ -1,8 +1,9 @@
 from email import message
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI,status
 from pydantic import BaseModel, EmailStr
 from fastapi.exceptions import HTTPException as HttpException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 app = FastAPI()
 
@@ -67,3 +68,27 @@ async def login(data: Authschema):
     except Exception as e:
         print(f"Error during login: {e}")
         return HttpException(status_code=500, detail=str(e))
+
+
+@app.get("/public/info",status_code=200)
+async def public_info():
+    return {"message": "This is a public endpoint accessible without authentication."}
+
+
+security=HTTPBearer()
+
+@app.get("/protected/info", status_code=200)
+async def protected_info(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    
+    # HTTPBearer already ensures credentials exists, but you can double check
+    if not token or not token.strip():
+        raise HttpException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Access token required"
+        )
+    
+    return {
+        "message": "Access granted to protected info",
+        "token": token
+    }
