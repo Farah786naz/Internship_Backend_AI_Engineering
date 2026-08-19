@@ -1,2 +1,13 @@
 Satge 1 update:
 Created two endpoints and tested them
+
+
+stage 2 update:
+Build a public lobby anyone can enter, and a locked door — even before you've hired the guard.
+Add a public endpoint GET /public/info . No auth. Returns { "message": "Welcome stranger! This
+info is public." } with status 200.
+Add a protected endpoint GET /protected/profile . To reach it, a client must send their access token in the
+Authorization header as Authorization: Bearer <token> .
+Inside the route, extract the token from that header.
+If the header is missing, malformed, or has no token, immediately return 401 with { "error": "Access
+token required" } . (You're not verifying the token yet — just checking one was presented.)
