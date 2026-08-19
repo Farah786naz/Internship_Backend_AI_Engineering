@@ -92,3 +92,28 @@ async def protected_info(credentials: HTTPAuthorizationCredentials = Depends(sec
         "message": "Access granted to protected info",
         "token": token
     }
+
+@app.get("/protected/profile", status_code=200)
+async def protected_profile(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+        token = credentials.credentials
+        from app.supabase_client import supabase
+        user_response = supabase.auth.get_user(token)
+        # HTTPBearer already ensures credentials exists, but you can double check
+        if not token or not token.strip() or not user_response.user:
+            raise HttpException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Access token required"
+            )
+        
+        return {
+            "message": "Access granted to protected profile",
+            "token": token,
+            "user": user_response.user
+        }
+    except Exception as e:
+        if str(e) == "Invalid JWT: Token is expired":
+            raise HttpException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Access token expired"
+            )
