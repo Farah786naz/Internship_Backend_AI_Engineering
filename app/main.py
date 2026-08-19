@@ -4,6 +4,8 @@ from fastapi import Depends, FastAPI,status
 from pydantic import BaseModel, EmailStr
 from fastapi.exceptions import HTTPException as HttpException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import supabase
+from middleware import require_auth
 
 app = FastAPI()
 
@@ -78,19 +80,11 @@ async def public_info():
 security=HTTPBearer()
 
 @app.get("/protected/info", status_code=200)
-async def protected_info(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    token = credentials.credentials
-    
-    # HTTPBearer already ensures credentials exists, but you can double check
-    if not token or not token.strip():
-        raise HttpException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Access token required"
-        )
-    
+async def protected_info(current_user: dict = Depends(require_auth)):
+    token = current_user["token"]
     return {
         "message": "Access granted to protected info",
-        "token": token
+        "token": token,
     }
 
 @app.get("/protected/profile", status_code=200)
@@ -117,3 +111,29 @@ async def protected_profile(credentials: HTTPAuthorizationCredentials = Depends(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Access token expired"
             )
+        
+# Protected Profile Route
+@app.get("/protected/profile", status_code=200)
+async def get_profile(current_user: dict = Depends(require_auth)):
+    user = current_user["user"]
+    return {
+        "message": "Access granted to profile",
+        "user_id": user.id,
+        "email": user.email
+    }
+
+# Checkpoint: Second Protected Route (Zero extra auth code needed)
+@app.get("/protected/dashboard", status_code=200)
+async def get_dashboard(current_user: dict = Depends(require_auth)):
+    user = current_user["user"]
+    return {
+        "message": f"Welcome to your dashboard, {user.email}!",
+        "stats": {"active_sessions": 1, "status": "verified"}
+    }
+
+# Protected Logout Route (Returns 204 No Content)
+@app.post("/auth/logout", status_code=status.HTTP_204_NO_CONTENT)
+async def logout(current_user: dict = Depends(require_auth)):
+    import app.supabase_client as supabase_client
+    supabase_client.supabase.auth.sign_out()
+    return None
