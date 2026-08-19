@@ -17,7 +17,7 @@ stage 3 update
 Successful Response
 {
   "message": "Access granted to protected profile",
-  "token": "eyJhbGciOiJFUzI1NiIsImtpZCI6ImU3OGE2NTE3LWI3NjAtNGVjNy05Y2JiLTY3MDAxMTA4MDQ1NSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3Njbmh4cXllbHBzZHN1YnVxaXRqLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIwYmY0MzU2OC0zYjc5LTRmNTUtYmJlNi05Zjc0ZTllNDQ5MDgiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzg3MTM4Njc3LCJpYXQiOjE3ODcxMzUwNzcsImVtYWlsIjoiZmFyYWhAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6ImZhcmFoQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6IjBiZjQzNTY4LTNiNzktNGY1NS1iYmU2LTlmNzRlOWU0NDkwOCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzg3MTM1MDc3fV0sInNlc3Npb25faWQiOiIxMDg0MGUwYi0xNTI5LTQwYmMtODM2NC1lMmY0OGQ4YjJhMjIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.az0tGkTbPnOcZIwP7h6ZAeVQd3cEsDAVohvqJuJ9wBUKZZhfh6xBSZxwokr4u6OguvRHVmGKSGMlJeRg_Hvsvw",
+  "token": "eyJhbGciOiJFUzI1NiIsImtpZCI6ImU3OGE2NTE3LWI3NjAtNGVjNy05Y2JiLTY3MDAxMTA4MDQ1NSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3Njbmh4cXllbHBzZHN1YnVxaXRqLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI[...]"
   "user": {
     "id": "0bf43568-3b79-4f55-bbe6-9f74e9e44908",
     "app_metadata": {
@@ -30,3 +30,11 @@ Successful Response
 Stage 4:
 processed logout successfully and added the the middleware
     
+
+![Stage 4](stage4-swagger.png)
+
+Stage 5 update:
+- Added token verification middleware to validate JWTs for protected routes and attach user info to requests.
+- Protected endpoint GET /protected/profile now returns profile data when a valid token is presented.
+- Improved logout handling to clear sessions/tokens and added basic tests.
+- Updated Swagger documentation (see stage4-swagger.png) and README.
