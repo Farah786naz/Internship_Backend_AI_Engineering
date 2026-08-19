@@ -26,4 +26,7 @@ Successful Response
         "email"
       ]
     },
+
+Stage 4:
+processed logout successfully and added the the middleware
     
