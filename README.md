@@ -34,3 +34,6 @@ Stage 1: Succesfully scraped the website and strored it in cache
 
 Stage 2: Feteched data and also listed all the indvidual urls along with their page urls
 ![alt text](image-2.png)
+
+Stage 3 : extract book details
+![alt text](image-3.png)
