@@ -25,3 +25,9 @@
 
 ## Ethical Scraper Policy
 "I will not reuse this code on another site without checking its rules and terms first."
+
+Stage 2: Succesfully scraped the website and strored it in cache
+![
+](image.png)
+
+![alt text](image-1.png)
