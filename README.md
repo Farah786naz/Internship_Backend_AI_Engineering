@@ -26,8 +26,11 @@
 ## Ethical Scraper Policy
 "I will not reuse this code on another site without checking its rules and terms first."
 
-Stage 2: Succesfully scraped the website and strored it in cache
+Stage 1: Succesfully scraped the website and strored it in cache
 ![
 ](image.png)
 
 ![alt text](image-1.png)
+
+Stage 2: Feteched data and also listed all the indvidual urls along with their page urls
+![alt text](image-2.png)
