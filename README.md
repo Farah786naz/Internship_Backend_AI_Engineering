@@ -37,3 +37,6 @@ Stage 2: Feteched data and also listed all the indvidual urls along with their p
 
 Stage 3 : extract book details
 ![alt text](image-3.png)
+
+Stage 4: Normalized response is stored in cache 
+![alt text](image-4.png)
