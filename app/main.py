@@ -325,3 +325,34 @@ async def root():
     products = crawl_products_from_every_page()
     return {"message": "Products crawled successfully.", "products": products[:5]}  # Return only the first 5 products for brevity
 
+
+from dotenv import load_dotenv
+from fastapi import FastAPI, Request, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+
+# Load environment variables from .env
+load_dotenv()
+
+from week7.router import router as llm_router
+
+app = FastAPI(
+    title="Book Enrichment API",
+    description="API for enriching scraped book records with structured AI metadata"
+)
+
+# Custom exception handler: Return 400 Bad Request naming the offending field
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = exc.errors()
+    first_error = errors[0] if errors else {}
+    field_name = " -> ".join(str(loc) for loc in first_error.get("loc", []))
+    msg = first_error.get("msg", "Invalid input")
+    
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={"error": f"Validation error on field '{field_name}': {msg}"}
+    )
+
+# Attach the router
+app.include_router(llm_router)
