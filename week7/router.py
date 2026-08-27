@@ -1,5 +1,8 @@
 import os
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import PlainTextResponse
+
+from week7.client import call_llm
 from .schemas import (
     AudienceEnum,
     BookEnrichInput,
@@ -31,9 +34,12 @@ async def enrich_book(payload: BookEnrichInput):
             is_complete_record=payload.description is not None,
             confidence=1.0,
         )
-
-    # Real LLM call will be wired in Stages 2, 3, and 4
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Model integration is not wired yet. Set LLM_STUB=1 in your .env to test."
-    )
+    try:
+        raw_model_response = call_llm(payload.model_dump())
+        # Return plain text / parsed json so we can inspect raw model adherence
+        return PlainTextResponse(content=raw_model_response, status_code=status.HTTP_200_OK)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Model call failed: {str(e)}"
+        )
