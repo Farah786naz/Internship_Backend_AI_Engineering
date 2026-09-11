@@ -4,17 +4,15 @@ import sqlite3
 DB_PATH = Path("report.db")
 
 def get_db_connection() -> sqlite3.Connection:
-    """Creates a database connection with dict-like row access."""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 def getReportData() -> dict:
-    """Executes the four aggregation queries and returns a unified report dictionary."""
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # 1. Total number of books
+    # 1. Total books
     cursor.execute("SELECT COUNT(*) AS total_books FROM books;")
     total_books = cursor.fetchone()["total_books"]
 
@@ -40,11 +38,16 @@ def getReportData() -> dict:
     """)
     books_per_rating = [dict(row) for row in cursor.fetchall()]
 
+    # 5. ALL 60 books (forces the PDF into 2+ pages)
+    cursor.execute("SELECT id, title, price, rating FROM books ORDER BY id ASC;")
+    all_books = [dict(row) for row in cursor.fetchall()]
+
     conn.close()
 
     return {
         "total_books": total_books,
         "average_price": avg_price,
         "top_5_expensive": top_5_expensive,
-        "books_per_rating": books_per_rating
+        "books_per_rating": books_per_rating,
+        "all_books": all_books
     }
